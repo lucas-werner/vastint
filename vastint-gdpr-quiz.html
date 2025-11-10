@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vastint - Privacy Champions GDPR Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0f12;
+      --card: #16181d;
+      --muted: #a8b0bf;
+      --primary: #2ecc71;
+      --accent: #1f9ef5;
+      --danger: #ff5d5d;
+      --border: #23262d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: #e7eaf0;
+      background: radial-gradient(1200px 600px at 80% -10%, #1a2430 0%, #0e0f12 60%);
+    }
+    header { display: flex; align-items: center; gap: 16px; padding: 24px 20px; border-bottom: 1px solid var(--border); background: rgba(16,18,23,0.7); backdrop-filter: blur(6px); position: sticky; top: 0; z-index: 10; }
+    header img.logo { height: 38px; width: auto; border-radius: 6px; background: #fff; padding: 4px; }
+    header h1 { font-size: 20px; margin: 0; letter-spacing: .2px; }
+
+    .container { max-width: 980px; margin: 24px auto 80px; padding: 0 16px; }
+
+    .hero { background: linear-gradient(180deg, rgba(31,158,245,0.15), rgba(46,204,113,0.08)); border: 1px solid var(--border); padding: 20px; border-radius: 16px; display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .hero h2 { margin: 0; font-size: 24px; }
+    .hero p { margin: 0; color: var(--muted); }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; }
+
+    .btn { appearance: none; border: 1px solid #2b2f36; background: linear-gradient(180deg, #2b3340, #222834); color: #fff; padding: 10px 16px; border-radius: 10px; cursor: pointer; font-weight: 600; box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 8px 24px rgba(0,0,0,0.25); }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn.primary { background: linear-gradient(180deg, #2ecc71, #1bb45f); border-color: #159d50; color: #03180d; }
+    .btn.accent { background: linear-gradient(180deg, #20a0ff, #1b82d2); border-color: #1569a9; }
+
+    .question { padding: 16px; border-radius: 12px; border: 1px solid var(--border); background: #12151b; }
+    .question h3 { margin: 0 0 10px; font-size: 16px; }
+    .options { display: grid; gap: 8px; }
+
+    .opt { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid #22262e; border-radius: 10px; background: #0f1217; }
+    .opt input { margin-top: 2px; }
+
+    .grid { display: grid; gap: 14px; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { border: 1px solid var(--border); padding: 10px; text-align: left; vertical-align: top; }
+    th { background: #1b1f27; }
+    .right { color: var(--primary); font-weight: 700; }
+    .wrong { color: var(--danger); font-weight: 700; }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <img class="logo" src="https://www.theworldreimagined.org/wp-content/uploads/2022/07/logo_Vastint1_cmyk.png" alt="Vastint logo" />
+    <h1>Vastint - Privacy Champions GDPR Quiz</h1>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <h2>Check your knowledge</h2>
+        <p>15 questions - GDPR concepts and Vastint procedures. Instant score and review table.</p>
+      </div>
+      <div>
+        <button id="startBtn" type="button" class="btn primary">Start quiz</button>
+        <button id="resetBtn" type="button" class="btn" style="margin-left:8px;" disabled>Reset</button>
+      </div>
+    </section>
+
+    <section id="quiz" class="card hidden">
+      <form id="quizForm" class="grid"></form>
+    </section>
+
+    <section id="results" class="card hidden">
+      <h2 style="margin-top:0;">Your score</h2>
+      <p id="scoreLine" style="color: var(--muted);"></p>
+      <div id="review"></div>
+      <div style="margin-top:12px; display:flex; gap:8px;">
+        <button id="tryAgain" class="btn" type="button">Try again</button>
+        <button id="printBtn" class="btn" type="button">Print</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Tougher, scenario-style questions (15)
+    const QUESTIONS = [
+      { q: "Which of these is personal data in the listed context?",
+        options: [
+          "Hashed user ID that cannot be reversed and is not linkable",
+          "IP address stored with access logs",
+          "Aggregated, irreversibly anonymised footfall numbers",
+          "Random GUID generated for a device then immediately discarded"
+        ],
+        answer: 1
+      },
+      { q: "Who is the controller here: Vastint uses a payroll SaaS that only processes based on written instructions?",
+        options: ["Vastint", "The payroll SaaS vendor", "Both are always joint controllers", "No controller applies"],
+        answer: 0
+      },
+      { q: "A joint controller relationship exists when",
+        options: [
+          "Two parties share data but decide purposes separately",
+          "Two parties jointly decide why and how to process",
+          "A processor selects its own sub-processor",
+          "A vendor hosts data with no say in purpose"
+        ],
+        answer: 1
+      },
+      { q: "When must a DPA be in place under Article 28?",
+        options: [
+          "Whenever data are shared with any third party",
+          "Between controller and processor",
+          "Only for special-category data",
+          "Only for EU-based processors"
+        ],
+        answer: 1
+      },
+      { q: "In Vastint's DPA process, who completes which schedules?",
+        options: [
+          "Controller completes Schedules 2 and 3",
+          "Processor completes Schedule 1",
+          "Controller completes Schedule 1; processor completes Schedules 2 and 3",
+          "Schedules are optional"
+        ],
+        answer: 2
+      },
+      { q: "Where should staff find templates and who to contact if a template is missing?",
+        options: [
+          "Public website - reception",
+          "Interogo Templates in Teams - privacy@vastint.eu",
+          "Finance folder - CFO",
+          "Vendor portal - vendor legal"
+        ],
+        answer: 1
+      },
+      { q: "Which scenario should trigger a DPIA per Article 35 and EDPB criteria?",
+        options: [
+          "Refreshing a static brochure website with no tracking",
+          "Introducing CCTV across a site",
+          "Buying new office chairs",
+          "Renaming an internal email list"
+        ],
+        answer: 1
+      },
+      { q: "CCTV at different locations",
+        options: [
+          "One DPIA is enough for all sites",
+          "A DPIA is only needed if there was a breach before",
+          "Each location should be assessed; signage and policy must be in place",
+          "No DPIA is needed if footage is kept under 24 hours"
+        ],
+        answer: 2
+      },
+      { q: "Which incident is a personal data breach under GDPR?",
+        options: [
+          "Internet outage with no data exposure",
+          "Lost unencrypted laptop with employee data",
+          "Planned server maintenance",
+          "Office move"
+        ],
+        answer: 1
+      },
+      { q: "At Vastint, your first action for a suspected breach is to",
+        options: [
+          "Tell affected data subjects immediately",
+          "Email it@vastint.eu to notify IT",
+          "Post an update on the intranet",
+          "Wait until you confirm beyond doubt"
+        ],
+        answer: 1
+      },
+      { q: "Which statement about the DPO is correct?",
+        options: [
+          "DPO takes instructions from management on individual cases",
+          "DPO must be independent for GDPR tasks; in the Netherlands DPOs are registered with the DPA",
+          "Privacy Champion and DPO have the same legal obligations",
+          "DPO is responsible for drafting every contract"
+        ],
+        answer: 1
+      },
+      { q: "Who is ultimately responsible for GDPR compliance at entity level?",
+        options: [
+          "Only the global DPO",
+          "A single person per entity remains responsible",
+          "Every staff member equally with no owners",
+          "External auditors"
+        ],
+        answer: 1
+      },
+      { q: "RoPA - which is the correct sequence?",
+        options: [
+          "Fill a spreadsheet, then ask departments if needed",
+          "Map departments and owners -> gather info through interviews or questionnaires -> fill the register",
+          "Wait for authority request -> collect info -> fill",
+          "Start with breach logs -> convert into a RoPA"
+        ],
+        answer: 1
+      },
+      { q: "Website responsibilities for Privacy Champions include",
+        options: [
+          "Keeping privacy policy and cookies up to date",
+          "Designing homepage visuals",
+          "Managing DNS records",
+          "Approving press releases"
+        ],
+        answer: 0
+      },
+      { q: "Which legal-basis statement is most accurate?",
+        options: [
+          "Legitimate interests never applies to marketing",
+          "Consent is always required for HR processing",
+          "Processing must have one valid legal basis that fits the purpose",
+          "Contract is valid only outside the EU"
+        ],
+        answer: 2
+      }
+    ];
+
+    // DOM elements (resolved on DOMContentLoaded)
+    let startBtn, resetBtn, quizSection, quizForm, resultsSection, scoreLine, review, tryAgainBtn, printBtn;
+
+    function renderQuiz() {
+      // Clear previous
+      quizForm.innerHTML = "";
+
+      // Build each question
+      QUESTIONS.forEach((item, idx) => {
+        const qWrap = document.createElement("div");
+        qWrap.className = "question";
+
+        const h3 = document.createElement("h3");
+        h3.textContent = `Q${idx + 1}. ${item.q}`;
+        qWrap.appendChild(h3);
+
+        const opts = document.createElement("div");
+        opts.className = "options";
+
+        item.options.forEach((opt, i) => {
+          const label = document.createElement("label");
+          label.className = "opt";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = `q${idx}`;
+          input.value = String(i);
+          input.required = true;
+
+          const span = document.createElement("span");
+          span.textContent = opt;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          opts.appendChild(label);
+        });
+
+        qWrap.appendChild(opts);
+        quizForm.appendChild(qWrap);
+      });
+
+      // Controls
+      const controls = document.createElement("div");
+      controls.style.display = "flex";
+      controls.style.gap = "8px";
+      controls.style.marginTop = "14px";
+
+      const submitBtn = document.createElement("button");
+      submitBtn.type = "submit";
+      submitBtn.id = "submitBtn";
+      submitBtn.className = "btn accent";
+      submitBtn.textContent = "Submit answers";
+
+      const backBtn = document.createElement("button");
+      backBtn.type = "button";
+      backBtn.id = "backToTop";
+      backBtn.className = "btn";
+      backBtn.title = "Back to top";
+      backBtn.textContent = "Back to top";
+
+      controls.appendChild(submitBtn);
+      controls.appendChild(backBtn);
+      quizForm.appendChild(controls);
+
+      backBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    }
+
+    function computeResults() {
+      const formData = new FormData(quizForm);
+      let correct = 0;
+      const rows = [];
+
+      QUESTIONS.forEach((item, idx) => {
+        const key = `q${idx}`;
+        const chosen = formData.get(key);
+        const chosenIdx = chosen !== null ? parseInt(chosen, 10) : -1;
+        const isRight = chosenIdx === item.answer;
+        if (isRight) correct++;
+        rows.push({
+          idx: idx + 1,
+          question: item.q,
+          user: chosenIdx >= 0 ? item.options[chosenIdx] : "No answer",
+          right: item.options[item.answer],
+          ok: isRight
+        });
+      });
+
+      scoreLine.textContent = `You scored ${correct} out of ${QUESTIONS.length}.`;
+
+      const table = document.createElement("table");
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th style="width:60px;">#</th>
+            <th>Question</th>
+            <th>Your answer</th>
+            <th>Correct answer</th>
+            <th style="width:90px;">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(r => `
+            <tr>
+              <td>${r.idx}</td>
+              <td>${r.question}</td>
+              <td>${r.user}</td>
+              <td>${r.right}</td>
+              <td class="${r.ok ? "right" : "wrong"}">${r.ok ? "Right" : "Wrong"}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      `;
+
+      review.innerHTML = "";
+      review.appendChild(table);
+
+      resultsSection.classList.remove("hidden");
+      resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function startQuiz() {
+      renderQuiz();
+      quizSection.classList.remove("hidden");
+      quizSection.style.display = "block";
+      startBtn.disabled = true;
+      resetBtn.disabled = false;
+      window.scrollTo({ top: quizSection.offsetTop - 20, behavior: "smooth" });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Resolve elements
+      startBtn = document.getElementById("startBtn");
+      resetBtn = document.getElementById("resetBtn");
+      quizSection = document.getElementById("quiz");
+      quizForm = document.getElementById("quizForm");
+      resultsSection = document.getElementById("results");
+      scoreLine = document.getElementById("scoreLine");
+      review = document.getElementById("review");
+      tryAgainBtn = document.getElementById("tryAgain");
+      printBtn = document.getElementById("printBtn");
+
+      // Wire actions
+      startBtn.addEventListener("click", startQuiz);
+
+      resetBtn.addEventListener("click", () => {
+        if (quizForm) quizForm.reset();
+        resultsSection.classList.add("hidden");
+        review.innerHTML = "";
+        scoreLine.textContent = "";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      quizForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const allAnswered = QUESTIONS.every((_, idx) => quizForm.querySelector(`input[name="q${idx}"]:checked`));
+        if (!allAnswered) {
+          alert("Please answer all questions before submitting.");
+          return;
+        }
+        computeResults();
+      });
+
+      tryAgainBtn.addEventListener("click", () => {
+        quizForm.reset();
+        resultsSection.classList.add("hidden");
+        review.innerHTML = "";
+        scoreLine.textContent = "";
+        window.scrollTo({ top: quizSection.offsetTop - 20, behavior: "smooth" });
+      });
+
+      printBtn.addEventListener("click", () => window.print());
+    });
+  </script>
+</body>
+</html>
