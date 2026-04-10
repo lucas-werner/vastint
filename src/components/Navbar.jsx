@@ -9,7 +9,7 @@ export default function Navbar() {
         <Link to="/" className="flex items-center gap-3">
           <img src="/logo_vastint_white.svg" alt="Vastint" className="h-7" />
           <span className="font-sans text-sm font-light tracking-widest uppercase text-white/50">
-            Privacy
+            Privacy Hub
           </span>
         </Link>
 

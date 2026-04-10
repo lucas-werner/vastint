@@ -12,12 +12,12 @@ export default function DashboardLayout() {
 
   const menuItems = [
     { name: 'Privacy Team', path: '/dashboard', icon: Users },
-    { name: 'One-Pager Guidance', path: '/dashboard/guidance', icon: Lightbulb },
     { name: 'Policies', path: '/dashboard/policies', icon: BookOpen },
-    { name: 'Trainings', path: '/dashboard/trainings', icon: GraduationCap },
+    { name: 'Privacy FAQ', path: '/dashboard/guidance', icon: Lightbulb },
     { name: 'DPIAs', path: '/dashboard/dpias', icon: FileText },
     { name: 'TIAs', path: '/dashboard/tias', icon: Globe },
     { name: 'Data Breach Assessment', path: '/dashboard/data-breach', icon: ShieldAlert },
+    { name: 'Trainings', path: '/dashboard/trainings', icon: GraduationCap },
     { name: 'Settings', path: '/dashboard/settings', icon: Settings },
   ];
 
@@ -87,7 +87,7 @@ export default function DashboardLayout() {
 
           <div className="hidden lg:flex items-center gap-3">
             <img src={`${import.meta.env.BASE_URL}logo_vastint.svg`} alt="Vastint" className="h-6 brightness-0 invert" />
-            <span className="text-sm font-light tracking-widest uppercase text-vastintBeige/50">Privacy</span>
+            <span className="text-sm font-light tracking-widest uppercase text-vastintBeige/50">Privacy Hub</span>
           </div>
 
           {/* Central Search Pill */}

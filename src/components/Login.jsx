@@ -34,7 +34,7 @@ export default function Login() {
       <div className="bg-[#2c3338] p-11 w-full max-w-[440px] shadow-lg rounded-xl border border-[#444]">
         <div className="mb-8 flex items-center gap-3">
            <img src="/logo_vastint_white.svg" alt="Vastint" className="h-8" />
-           <span className="text-sm font-light tracking-widest uppercase text-white/60">Privacy</span>
+           <span className="text-sm font-light tracking-widest uppercase text-white/60">Privacy Hub</span>
         </div>
 
         <form onSubmit={handleLogin}>

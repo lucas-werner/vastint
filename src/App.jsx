@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Login from './components/Login';
 import DashboardLayout from './components/DashboardLayout';
 import DPIAView from './components/Dashboard/DPIAView';
+import DPIASession from './components/Dashboard/DPIASession';
 import TIAView from './components/Dashboard/TIAView';
 import PoliciesView from './components/Dashboard/PoliciesView';
 import DataBreachView from './components/Dashboard/DataBreachView';
@@ -72,6 +73,7 @@ function App() {
             <Route path="policies" element={<PoliciesView />} />
             <Route path="trainings" element={<TrainingsView />} />
             <Route path="dpias" element={<DPIAView />} />
+            <Route path="dpias/new" element={<DPIASession />} />
             <Route path="tias" element={<TIAView />} />
             <Route path="data-breach" element={<DataBreachView />} />
             <Route path="settings" element={<div className="p-8">Settings Area</div>} />

@@ -107,7 +107,7 @@ export default function PublicHub() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-sm text-white/40 md:flex-row">
           <div className="flex items-center gap-3">
             <img src="/logo_vastint_white.svg" alt="Vastint" className="h-5" />
-            <span className="text-white/40">Privacy Platform</span>
+            <span className="text-white/40">Privacy Hub</span>
           </div>
           <p>&copy; {new Date().getFullYear()} Vastint. All rights reserved.</p>
           <p className="text-white/40 text-sm">
