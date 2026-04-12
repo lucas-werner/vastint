@@ -1,6 +1,7 @@
 {
   "name": "vastint-privacy",
   "version": "1.0.0",
+  "type": "module",
   "main": "tailwind.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
