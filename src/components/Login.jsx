@@ -15,9 +15,20 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // Mock login — accept any credentials
-      await new Promise((resolve) => setTimeout(resolve, 400));
-      login();
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashHex = Array.from(new Uint8Array(hashBuffer))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+
+      const VALID_HASH = '56d091b2c1863d6bf0d4896949bdc75712667bea8077e426ec38549410e92745';
+
+      if (hashHex === VALID_HASH) {
+        login();
+      } else {
+        setError('Invalid password. Please try again.');
+      }
     } catch {
       setError('Authentication failed. Please try again.');
     } finally {
